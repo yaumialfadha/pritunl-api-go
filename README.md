@@ -23,7 +23,7 @@ export PRITUNL_API_SECRET="<PRITUNL API SECRET>"
 Get the Pritunl API Client for Go package/library:
 
 ```bash
-go get github.com/nathanielvarona/pritunl-api-go
+go get github.com/yaumialfadha/pritunl-api-go
 ```
 
 ### Usage
@@ -39,7 +39,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/nathanielvarona/pritunl-api-go"
+	"github.com/yaumialfadha/pritunl-api-go"
 )
 
 func main() {
@@ -96,7 +96,7 @@ We welcome your contributions to pritunl-api-go. This guide outlines the process
 
 #### Workflow:
 
-1. **Fork the repository:** Visit the [pritunl-api-go](https://github.com/nathanielvarona/pritunl-api-go) repository on GitHub and click "`Fork`". This creates your own copy.
+1. **Fork the repository:** Visit the [pritunl-api-go](https://github.com/yaumialfadha/pritunl-api-go) repository on GitHub and click "`Fork`". This creates your own copy.
 2. **Clone your forked repository:** Use git clone to clone your forked copy to your local development environment.
 3. **Create a Branch:** Use a descriptive branch name following the convention `<type>/<descriptive-name>`.
    - `<type>`: Choose from `breaking`, `feature`, `improvement`, `automation`, or `documentation`.

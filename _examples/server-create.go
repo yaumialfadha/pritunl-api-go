@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/nathanielvarona/pritunl-api-go"
+	"github.com/yaumialfadha/pritunl-api-go"
 )
 
 func main() {

@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/nathanielvarona/pritunl-api-go"
+	"github.com/yaumialfadha/pritunl-api-go"
 )
 
 // UserResponse represents a user response from the Pritunl API
