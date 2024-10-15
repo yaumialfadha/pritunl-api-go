@@ -62,46 +62,53 @@ func NewClient(pritunl ...*Client) (*Client, error) {
 	}, nil
 }
 
-// AuthRequest performs an authenticated API request
 func (c *Client) AuthRequest(ctx context.Context, method, path string, data []byte) (*http.Response, error) {
-	// Generate a timestamp and nonce for authentication
-	authTimestamp := strconv.FormatInt(time.Now().Unix(), 10)
-	authNonce := strings.ReplaceAll(uuid.New().String(), "-", "")
+    // Generate a timestamp and nonce for authentication
+    authTimestamp := strconv.FormatInt(time.Now().Unix(), 10)
+    authNonce := strings.ReplaceAll(uuid.New().String(), "-", "")
 
-	// Construct the authentication string
-	authString := fmt.Sprintf("%s&%s&%s&%s&%s", c.ApiToken, authTimestamp, authNonce, method, path)
+    // Construct the authentication string
+    authString := fmt.Sprintf("%s&%s&%s&%s&%s", c.ApiToken, authTimestamp, authNonce, method, path)
 
-	// Generate the authentication signature using HMAC SHA256
-	hash := hmac.New(sha256.New, []byte(c.ApiSecret))
-	hash.Write([]byte(authString))
-	authSignature := base64.StdEncoding.EncodeToString(hash.Sum(nil))
+    // Generate the authentication signature using HMAC SHA256
+    hash := hmac.New(sha256.New, []byte(c.ApiSecret))
+    hash.Write([]byte(authString))
+    authSignature := base64.StdEncoding.EncodeToString(hash.Sum(nil))
 
-	// Set the authentication headers
-	headers := map[string]string{
-		"Auth-Token":     c.ApiToken,
-		"Auth-Timestamp": authTimestamp,
-		"Auth-Nonce":     authNonce,
-		"Auth-Signature": authSignature,
-		"Content-Type":   "application/json", // Default content type
-	}
+    // Set the authentication headers
+    headers := map[string]string{
+        "Auth-Token":     c.ApiToken,
+        "Auth-Timestamp": authTimestamp,
+        "Auth-Nonce":     authNonce,
+        "Auth-Signature": authSignature,
+        "Content-Type":   "application/json", // Default content type
+    }
 
-	// Create a new HTTP request
-	req, err := http.NewRequestWithContext(ctx, method, c.BaseUrl+path, bytes.NewBuffer(data))
-	if err != nil {
-		return nil, err
-	}
+    // Create a new HTTP request
+    req, err := http.NewRequestWithContext(ctx, method, c.BaseUrl+path, bytes.NewBuffer(data))
+    if err != nil {
+        return nil, err
+    }
 
-	// Set the request headers
-	for k, v := range headers {
-		req.Header.Set(k, v)
-	}
+    // Set the request headers
+    for k, v := range headers {
+        req.Header.Set(k, v)
+    }
 
-	// Send the request
-	client := &http.Client{}
-	response, err := client.Do(req)
-	if err != nil {
-		return nil, err
-	}
+    // Create a custom HTTP client with InsecureSkipVerify set to true
+    transport := &http.Transport{
+        TLSClientConfig: &tls.Config{
+            InsecureSkipVerify: true,
+        },
+    }
+    client := &http.Client{Transport: transport}
 
-	return response, nil
+    // Send the request using the custom HTTP client
+    response, err := client.Do(req)
+    if err != nil {
+        return nil, err
+    }
+
+    return response, nil
 }
+
